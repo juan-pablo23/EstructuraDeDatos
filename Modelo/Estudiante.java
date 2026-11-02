@@ -1,3 +1,4 @@
+package Modelo;
 import java.util.LinkedList;
 
 public class Estudiante extends Persona {
