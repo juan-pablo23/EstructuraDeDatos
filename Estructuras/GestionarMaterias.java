@@ -1,3 +1,4 @@
+package Estructuras;
 import Modelo.Materia;
 import Modelo.Estudiante;
 import java.util.LinkedList;
