@@ -38,4 +38,22 @@ public class Estudiante extends Persona {
         System.out.println("Email: " + getEmail());
         System.out.println("Semestre: " + semestre);
     }
+
+    private LinkedList<String> materiasAprobadas; {
+        this.materiasAprobadas = new LinkedList<>();
+    }
+
+    public void registrarMateriasAprobadas(String codigoMateria) {
+        if (!materiasAprobadas.contains(codigoMateria)) {
+            materiasAprobadas.add(codigoMateria);
+        }
+    }
+
+    public boolean haAprobadoMateria(String codigoMateria) {
+        return materiasAprobadas.contains(codigoMateria);
+    }
+
+    public LinkedList<String> getMateriasAprobadas() {
+        return materiasAprobadas;
+    }
 }

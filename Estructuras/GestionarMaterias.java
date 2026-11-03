@@ -1,4 +1,5 @@
 import Modelo.Materia;
+import Modelo.Estudiante;
 import java.util.LinkedList;
 
 public class GestionarMaterias {
@@ -94,6 +95,43 @@ public class GestionarMaterias {
             materia.agregarEstudianteInscrito(siguienteEstudiante);
             System.out.println("se libero un cupo.");
             System.out.println("El estudiante: " + siguienteEstudiante + " fue inscrito automaticamente.");
+        }
+    }
+
+    public void inscribirEstudianteConPrerrequisitos(String codigoMateria, Estudiante estudiante) {
+        Materia materia = buscarMateria(codigoMateria);
+
+        if (materia == null) {
+            System.out.println("Error: esa materia no existe.");
+            return;
+        }
+
+        String idEstudiante = estudiante.getId();
+
+        if(materia.getEstudiantesInscritos().contains(idEstudiante)) {
+            System.out.println("El estudiante ya esta inscrito.");
+        }
+
+        if (materia.getColaEspera().contains(idEstudiante)) {
+            System.out.println("El estudiante ya esta en la cola de espera.");
+            return;
+        }
+
+        for (String codigoPrerrequisito : materia.getPrerrequisitos()) {
+            if (!estudiante.haAprobadoMateria(codigoPrerrequisito)) {
+                System.out.println("Inscripcion rechazada. No ha aprobado: " + codigoPrerrequisito);
+                return;
+            }
+        }
+
+        if (materia.tieneCupo()) {
+            materia.agregarEstudianteInscrito(idEstudiante);
+            System.out.println("Estudiante inscrito correctamente.");
+
+        } else {
+            materia.agregarEstudianteEnEspera(idEstudiante);
+            System.out.println("No hay cupos disponibles.");
+            System.out.println("Estudiante agregado a la cola de espera.");
         }
     }
 }
