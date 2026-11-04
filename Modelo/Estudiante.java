@@ -1,8 +1,9 @@
 package Modelo;
+
 import java.util.LinkedList;
 
 public class Estudiante extends Persona {
-    
+
     private int semestre;
     private Double[][] notas;
     private LinkedList<String> historialMaterias;
@@ -31,7 +32,7 @@ public class Estudiante extends Persona {
         return historialMaterias;
     }
 
-    @Override 
+    @Override
     public void mostrarInformacion() {
         System.out.println("ID: " + getId());
         System.out.println("Nombre: " + getNombre());

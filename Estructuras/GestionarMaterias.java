@@ -1,10 +1,11 @@
 package Estructuras;
+
 import Modelo.Materia;
 import Modelo.Estudiante;
 import java.util.LinkedList;
 
 public class GestionarMaterias {
-    
+
     private LinkedList<Materia> materias;
 
     public GestionarMaterias() {
@@ -109,7 +110,7 @@ public class GestionarMaterias {
 
         String idEstudiante = estudiante.getId();
 
-        if(materia.getEstudiantesInscritos().contains(idEstudiante)) {
+        if (materia.getEstudiantesInscritos().contains(idEstudiante)) {
             System.out.println("El estudiante ya esta inscrito.");
         }
 
@@ -134,5 +135,17 @@ public class GestionarMaterias {
             System.out.println("No hay cupos disponibles.");
             System.out.println("Estudiante agregado a la cola de espera.");
         }
+    }
+
+    public void inscribirEstudianteRegistrado(String codigoMateria, String idEstudiante,
+            GestionarEstudiantes gestionEstudiantes) {
+        Estudiante estudiante = gestionEstudiantes.buscarEstudiante(idEstudiante);
+
+        if (estudiante == null) {
+            System.out.println("Error: el estudiante no esta registrado.");
+            return;
+        }
+
+        inscribirEstudianteConPrerrequisitos(codigoMateria, estudiante);
     }
 }

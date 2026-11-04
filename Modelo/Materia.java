@@ -1,9 +1,10 @@
 package Modelo;
+
 import java.util.LinkedList;
 import java.util.Queue;
 
 public class Materia {
-    
+
     private String codigo;
     private String nombre;
     private int cuposMaximos;
@@ -12,7 +13,7 @@ public class Materia {
     private LinkedList<String> estudiantesInscritos;
     private Queue<String> colaEspera;
 
-    public Materia (String codigo, String nombre, int cuposMaximos, int creditos) {
+    public Materia(String codigo, String nombre, int cuposMaximos, int creditos) {
         this.codigo = codigo;
         this.nombre = nombre;
         this.cuposMaximos = cuposMaximos;

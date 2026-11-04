@@ -1,4 +1,5 @@
 package Modelo;
+
 public abstract class Persona {
 
     private String nombre;
