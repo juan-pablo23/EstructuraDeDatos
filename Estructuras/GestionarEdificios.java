@@ -14,7 +14,7 @@ public class GestionarEdificios {
         cantidadEdificios = 0;
 
         for (int i = 0; i < capacidad; i++) {
-            
+
             for (int j = 0; j < capacidad; j++) {
 
                 if (i == j) {
@@ -98,5 +98,92 @@ public class GestionarEdificios {
 
             System.out.println();
         }
+    }
+
+    public void calcularRutaMasCorta(String codigoOrigen, String codigoDestino) {
+        int origen = buscarEdificio(codigoOrigen);
+        int destino = buscarEdificio(codigoDestino);
+
+        if (origen == -1 || destino == -1) {
+            System.out.println("Error: uno de los edificios no existe.");
+            return;
+        }
+
+        int cantidad = cantidadEdificios;
+        int[] distanciasMinimas = new int[cantidad];
+        int[] anteriores = new int[cantidad];
+        boolean[] visitados = new boolean[cantidad];
+
+        for (int i = 0; i < cantidad; i++) {
+            distanciasMinimas[i] = Integer.MAX_VALUE;
+            anteriores[i] = -1;
+            visitados[i] = false;
+        }
+
+        distanciasMinimas[origen] = 0;
+
+        for (int i = 0; i < cantidad; i++) {
+            int actual = -1;
+            int menorDistancia = Integer.MAX_VALUE;
+
+            for (int j = 0; j < cantidad; j++) {
+
+                if (!visitados[j] && distanciasMinimas[j] < menorDistancia) {
+                    menorDistancia = distanciasMinimas[j];
+                    actual = j;
+                }
+            }
+
+            if (actual == -1) {
+                break;
+            }
+
+            visitados[actual] = true;
+
+            if (actual == destino) {
+                break;
+            }
+
+            for (int j = 0; j < cantidad; j++) {
+                int distancia = distancias[actual][j];
+
+                if (!visitados[j] && distancia > 0 && distanciasMinimas[actual] != Integer.MAX_VALUE) {
+                    int nuevaDistancia = distanciasMinimas[actual] + distancia;
+
+                    if (nuevaDistancia < distanciasMinimas[j]) {
+                        distanciasMinimas[j] = nuevaDistancia;
+                        anteriores[j] = actual;
+                    }
+                }
+            }
+        }
+
+        if (distanciasMinimas[destino] == Integer.MAX_VALUE) {
+            System.out.println("No existe una ruta entre los edificios.");
+            return;
+        }
+
+        int[] ruta = new int[cantidad];
+        int cantidadRuta = 0;
+        int actual = destino;
+
+        while (actual != -1) {
+            ruta[cantidadRuta] = actual;
+            cantidadRuta++;
+            actual = anteriores[actual];
+        }
+
+        System.out.println("\n=== RUTA MAS CORTA ===");
+
+        for (int i = cantidadRuta - 1; i >= 0; i--) {
+            System.out.print(edificios[ruta[i]].getNombre());
+
+            if (i > 0) {
+                System.out.print(" -> ");
+            }
+        }
+
+        System.out.println();
+        System.out.println("Distancia total: " + distanciasMinimas[destino] + " metros.");
     }
 }
