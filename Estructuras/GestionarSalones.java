@@ -41,7 +41,6 @@ public class GestionarSalones {
     }
 
     public void eliminarSalon(String codigo) {
-
         if (salones.remove(codigo) != null) {
             System.out.println("Salon eliminado correctamente.");
         } else {

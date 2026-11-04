@@ -42,7 +42,6 @@ public class Salon {
     }
 
     public boolean reservarHorario(int dia, int hora) {
-
         if (dia < 0 || dia >= 7 || hora < 0 || hora >= 24) {
             System.out.println("Error: dia u hora no validos.");
             return false;
@@ -54,20 +53,17 @@ public class Salon {
         }
 
         disponibilidad[dia][hora] = false;
-
         System.out.println("Horario reservado correctamente.");
         return true;
     }
 
     public void liberarHorario(int dia, int hora) {
-
         if (dia < 0 || dia >= 7 || hora < 0 || hora >= 24) {
             System.out.println("Error: dia u hora no validos.");
             return;
         }
 
         disponibilidad[dia][hora] = true;
-
         System.out.println("Horario liberado correctamente.");
     }
 
