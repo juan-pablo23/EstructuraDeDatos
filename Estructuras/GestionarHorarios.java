@@ -12,7 +12,8 @@ public class GestionarHorarios {
         horarios = new LinkedList<>();
     }
 
-    public void asignarHorario(String codigoMateria, String codigoSalon, int dia, int hora, GestionarSalones gestionSalones) {
+    public void asignarHorario(String codigoMateria, String codigoSalon, int dia, int hora,
+            GestionarSalones gestionSalones) {
         Salon salon = gestionSalones.buscarSalon(codigoSalon);
 
         if (salon == null) {
@@ -42,5 +43,34 @@ public class GestionarHorarios {
             System.out.println("------------------------");
             horario.mostrarInformacion();
         }
+    }
+
+    public void eliminarHorario(String codigoMateria, String codigoSalon, int dia, int hora,
+            GestionarSalones gestionSalones) {
+        Horario horarioEliminar = null;
+
+        for (Horario horario : horarios) {
+
+            if (horario.getCodigoMateria().equals(codigoMateria) && horario.getCodigoSalon().equals(codigoSalon)
+                    && horario.getDia() == dia && horario.getHora() == hora) {
+                horarioEliminar = horario;
+                break;
+            }
+        }
+
+        if (horarioEliminar == null) {
+            System.out.println("No se encontro el horario.");
+            return;
+        }
+
+        horarios.remove(horarioEliminar);
+
+        Salon salon = gestionSalones.buscarSalon(codigoSalon);
+
+        if (salon != null) {
+            salon.liberarHorario(dia, hora);
+        }
+
+        System.out.println("Horario eliminado correctamente.");
     }
 }
