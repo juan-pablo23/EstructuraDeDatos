@@ -148,4 +148,16 @@ public class GestionarMaterias {
 
         inscribirEstudianteConPrerrequisitos(codigoMateria, estudiante);
     }
+
+    public void eliminarMateria(String codigo) {
+        Materia materia = buscarMateria(codigo);
+
+        if (materia == null) {
+            System.out.println("No se encontro la materia.");
+            return;
+        }
+
+        materias.remove(materia);
+        System.out.println("Materia eliminada correctamente.");
+    }
 }
