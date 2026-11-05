@@ -186,4 +186,40 @@ public class GestionarEdificios {
         System.out.println();
         System.out.println("Distancia total: " + distanciasMinimas[destino] + " metros.");
     }
+
+    public void eliminarEdificio(String codigo) {
+        int posicion = buscarEdificio(codigo);
+
+        if (posicion == -1) {
+            System.out.println("No se encontro el edificio.");
+            return;
+        }
+
+        for (int i = posicion; i < cantidadEdificios - 1; i++) {
+            edificios[i] = edificios[i + 1];
+        }
+
+        edificios[cantidadEdificios - 1] = null;
+
+        for (int i = posicion; i < cantidadEdificios - 1; i++) {
+            for (int j = 0; j < cantidadEdificios; j++) {
+                distancias[i][j] = distancias[i + 1][j];
+            }
+        }
+
+        for (int j = posicion; j < cantidadEdificios - 1; j++) {
+            for (int i = 0; i < cantidadEdificios - 1; i++) {
+                distancias[i][j] = distancias[i][j + 1];
+            }
+        }
+
+        cantidadEdificios--;
+
+        for (int i = 0; i < edificios.length; i++) {
+            distancias[cantidadEdificios][i] = 0;
+            distancias[i][cantidadEdificios] = 0;
+        }
+
+        System.out.println("Edificio eliminado correctamente.");
+    }
 }
