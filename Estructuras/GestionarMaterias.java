@@ -2,6 +2,9 @@ package Estructuras;
 
 import Modelo.Materia;
 import Modelo.Estudiante;
+import Excepciones.MateriaNoEncontradaException;
+import Excepciones.PrerrequisitoNoCumplidoException;
+import Excepciones.CupoLlenoException;
 import java.util.LinkedList;
 
 public class GestionarMaterias {
@@ -30,7 +33,7 @@ public class GestionarMaterias {
             }
         }
 
-        return null;
+        throw new MateriaNoEncontradaException("No existe una materia con el codigo: " + codigo);
     }
 
     public void mostrarMaterias() {
@@ -121,8 +124,8 @@ public class GestionarMaterias {
 
         for (String codigoPrerrequisito : materia.getPrerrequisitos()) {
             if (!estudiante.haAprobadoMateria(codigoPrerrequisito)) {
-                System.out.println("Inscripcion rechazada. No ha aprobado: " + codigoPrerrequisito);
-                return;
+                throw new PrerrequisitoNoCumplidoException(
+                        "El estudiante no ha aprobado el prerrequisito" + codigoPrerrequisito);
             }
         }
 
@@ -159,5 +162,34 @@ public class GestionarMaterias {
 
         materias.remove(materia);
         System.out.println("Materia eliminada correctamente.");
+    }
+
+    public void inscribirEstudianteSinEspera(String codigoMateria, Estudiante estudiante) {
+        Materia materia = buscarMateria(codigoMateria);
+
+        if (materia.getEstudiantesInscritos().contains(estudiante.getId())) {
+            System.out.println("El estudiante ya esta inscrito.");
+            return;
+        }
+
+        if (materia.getColaEspera().contains(estudiante.getId())) {
+            System.out.println("El estudiante ya esta en la cola de espera.");
+            return;
+        }
+
+        for (String codigoPrerrequisito : materia.getPrerrequisitos()) {
+
+            if (!estudiante.haAprobadoMateria(codigoPrerrequisito)) {
+                throw new PrerrequisitoNoCumplidoException("No se ha aprobado el prerrequisito: " + codigoPrerrequisito);
+            }
+        }
+
+        if (!materia.tieneCupo()) {
+            throw new CupoLlenoException("No hay cupos disponibles en la materia: " + materia.getNombre());
+        }
+
+        materia.agregarEstudianteInscrito(estudiante.getId());
+
+        System.out.println("Inscripcion realizada correctamente.");
     }
 }

@@ -1,6 +1,9 @@
 package Estructuras;
 
 import Modelo.Solicitud;
+import Excepciones.EstudianteNoEncontradoException;
+import Excepciones.MateriaNoEncontradaException;
+import Excepciones.PrerrequisitoNoCumplidoException;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -65,8 +68,17 @@ public class GestionarSolicitudes {
         System.out.println("Procesando solicitud:");
         solicitud.mostrarInformacion();
 
-        gestionMaterias.inscribirEstudianteRegistrado(solicitud.getCodigoMateria(), solicitud.getIdEstudiante(),
-                gestionEstudiantes);
+        try {
+            gestionMaterias.inscribirEstudianteRegistrado(solicitud.getCodigoMateria(), solicitud.getIdEstudiante(),
+                    gestionEstudiantes);
+        } catch (EstudianteNoEncontradoException e) {
+            System.out.println("ERROR: " + e.getMessage());
+        } catch (MateriaNoEncontradaException e) {
+            System.out.println("ERROR: " + e.getMessage());
+        } catch (PrerrequisitoNoCumplidoException e) {
+            System.out.println("ERROR: " + e.getMessage());
+        }
+
         System.out.println("----------------------");
     }
 

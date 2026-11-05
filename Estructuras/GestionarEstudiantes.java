@@ -1,6 +1,7 @@
 package Estructuras;
 
 import Modelo.Estudiante;
+import Excepciones.EstudianteNoEncontradoException;
 import java.util.HashMap;
 
 public class GestionarEstudiantes {
@@ -23,7 +24,13 @@ public class GestionarEstudiantes {
     }
 
     public Estudiante buscarEstudiante(String id) {
-        return estudiantes.get(id);
+        Estudiante estudiante = estudiantes.get(id);
+
+        if (estudiante == null) {
+            throw new EstudianteNoEncontradoException("No existe un estudiante con ese ID: " + id);
+        }
+
+        return estudiante;
     }
 
     public void mostrarEstudiantes() {
