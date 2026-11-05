@@ -54,4 +54,34 @@ public class GestionarSolicitudes {
 
         System.out.println("Todas las solicitudes fueron procesadas.");
     }
+
+    public void procesarSolicitud(GestionarEstudiantes gestionEstudiantes, GestionarMaterias gestionMaterias) {
+        if (solicitudes.isEmpty()) {
+            System.out.println("No hay solicitudes pendientes.");
+            return;
+        }
+
+        Solicitud solicitud = solicitudes.poll();
+        System.out.println("Procesando solicitud:");
+        solicitud.mostrarInformacion();
+
+        gestionMaterias.inscribirEstudianteRegistrado(solicitud.getCodigoMateria(), solicitud.getIdEstudiante(),
+                gestionEstudiantes);
+        System.out.println("----------------------");
+    }
+
+    public void procesarTodasLasSolicitudes(GestionarEstudiantes gestionEstudiantes,
+            GestionarMaterias gestionMaterias) {
+        if (solicitudes.isEmpty()) {
+            System.out.println("No hay solicitudes para procesar.");
+            return;
+        }
+
+        while (!solicitudes.isEmpty()) {
+            procesarSolicitud(gestionEstudiantes, gestionMaterias);
+
+        }
+
+        System.out.println("Todas las solicitudes fueron procesadas.");
+    }
 }
