@@ -52,6 +52,7 @@ public class Principal {
                         System.out.println("2. Buscar estudiante");
                         System.out.println("3. Mostrar todos los estudiantes");
                         System.out.println("4. Eliminar estudiante");
+                        System.out.println("5. Registrar notas");
                         System.out.println("0. Volver al menu principal");
                         System.out.print("Seleccione una opcion: ");
 
@@ -135,6 +136,78 @@ public class Principal {
                                 String idEliminar = teclado.nextLine();
 
                                 gestionarEstudiantes.eliminarEstudiantes(idEliminar);
+
+                                break;
+
+                            case 5:
+
+                                System.out.print("Ingrese el ID del estudiante: ");
+                                String idNota = teclado.nextLine();
+
+                                try {
+                                    Estudiante estudianteNota = gestionarEstudiantes.buscarEstudiante(idNota);
+
+                                    System.out.print("Ingrese el semestre (1-10): ");
+                                    int semestreNota = teclado.nextInt();
+                                    teclado.nextLine();
+
+                                    System.out.print("Ingrese la posicion de la materia (1-20): ");
+                                    int posicionMateria = teclado.nextInt();
+                                    teclado.nextLine();
+
+                                    System.out.print("Ingrese el codigo de la materia: ");
+                                    String codigoMateria = teclado.nextLine();
+
+                                    System.out.print("Ingrese la nota (0.0 - 5.0): ");
+                                    double nota = teclado.nextDouble();
+                                    teclado.nextLine();
+
+                                    int indiceSemestre = semestreNota - 1;
+                                    int indiceMateria = posicionMateria - 1;
+
+                                    if (semestreNota < 1 || semestreNota > 10
+                                            || posicionMateria < 1 || posicionMateria > 20
+                                            || nota < 0 || nota > 5) {
+
+                                        System.out.println("Los datos ingresados no son validos.");
+
+                                    } else if (estudianteNota.getCodigoMateria(
+                                            indiceSemestre, indiceMateria) != null) {
+
+                                        System.out.println("Esa posicion ya tiene una materia asociada.");
+
+                                    } else {
+
+                                        estudianteNota.asociarMateria(
+                                                indiceSemestre, indiceMateria, codigoMateria);
+
+                                        estudianteNota.registrarNota(
+                                                indiceSemestre, indiceMateria, nota);
+
+                                        Operacion operacionNota = new Operacion(
+                                                "NOTA",
+                                                "Registro de nota para " + codigoMateria,
+                                                estudianteNota,
+
+                                                () -> estudianteNota.deshacerRegistroNota(
+                                                        indiceSemestre, indiceMateria),
+
+                                                () -> {
+                                                    estudianteNota.asociarMateria(
+                                                            indiceSemestre, indiceMateria, codigoMateria);
+
+                                                    estudianteNota.registrarNota(
+                                                            indiceSemestre, indiceMateria, nota);
+                                                });
+
+                                        gestionarOperaciones.registrarOperacion(operacionNota);
+
+                                        System.out.println("Nota registrada y operacion guardada.");
+                                    }
+
+                                } catch (EstudianteNoEncontradoException e) {
+                                    System.out.println("Error: " + e.getMessage());
+                                }
 
                                 break;
 

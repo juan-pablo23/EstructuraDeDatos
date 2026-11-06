@@ -324,4 +324,19 @@ public class Estudiante extends Persona {
 
         System.out.println("======================================");
     }
+
+    public String getCodigoMateria(int indiceSemestre, int indiceMateria) {
+        if (!posicionValida(indiceSemestre, indiceMateria)) {
+            return null;
+        }
+
+        return codigosMaterias[indiceSemestre][indiceMateria];
+    }
+
+    public void deshacerRegistroNota(int indiceSemestre, int indiceMateria) {
+        if (posicionValida(indiceSemestre, indiceMateria)) {
+            notas[indiceSemestre][indiceMateria] = null;
+            codigosMaterias[indiceSemestre][indiceMateria] = null;
+        }
+    }
 }
