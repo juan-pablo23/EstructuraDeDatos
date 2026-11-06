@@ -1,7 +1,9 @@
+
 package Estructuras;
 
 import Modelo.Horario;
 import Modelo.Salon;
+import Excepciones.HorarioConflictivoException;
 import java.util.LinkedList;
 
 public class GestionarHorarios {
@@ -12,8 +14,17 @@ public class GestionarHorarios {
         horarios = new LinkedList<>();
     }
 
-    public void asignarHorario(String codigoMateria, String codigoSalon, int dia, int hora,
+    public void asignarHorario(String codigoMateria, String codigoSalon,
+            int dia, int hora, GestionarSalones gestionSalones) {
+
+        asignarHorario(codigoMateria, codigoSalon, dia, hora,
+                1, gestionSalones);
+    }
+
+    public void asignarHorario(String codigoMateria, String codigoSalon,
+            int dia, int hora, int duracion,
             GestionarSalones gestionSalones) {
+
         Salon salon = gestionSalones.buscarSalon(codigoSalon);
 
         if (salon == null) {
@@ -21,19 +32,25 @@ public class GestionarHorarios {
             return;
         }
 
-        if (!salon.estaDisponible(dia, hora)) {
-            System.out.println("Error: el salon esta ocupado.");
-            return;
-        }
+        try {
 
-        if (salon.reservarHorario(dia, hora)) {
-            Horario nuevoHorario = new Horario(codigoMateria, codigoSalon, dia, hora);
+            salon.reservarHorario(dia, hora, duracion);
+
+            Horario nuevoHorario = new Horario(
+                    codigoMateria, codigoSalon,
+                    dia, hora, duracion);
+
             horarios.add(nuevoHorario);
+
             System.out.println("Horario asignado correctamente.");
+
+        } catch (HorarioConflictivoException e) {
+            System.out.println("Error: " + e.getMessage());
         }
     }
 
     public void mostrarHorarios() {
+
         if (horarios.isEmpty()) {
             System.out.println("No hay horarios registrados.");
             return;
@@ -45,14 +62,18 @@ public class GestionarHorarios {
         }
     }
 
-    public void eliminarHorario(String codigoMateria, String codigoSalon, int dia, int hora,
-            GestionarSalones gestionSalones) {
+    public void eliminarHorario(String codigoMateria, String codigoSalon,
+            int dia, int hora, GestionarSalones gestionSalones) {
+
         Horario horarioEliminar = null;
 
         for (Horario horario : horarios) {
 
-            if (horario.getCodigoMateria().equals(codigoMateria) && horario.getCodigoSalon().equals(codigoSalon)
-                    && horario.getDia() == dia && horario.getHora() == hora) {
+            if (horario.getCodigoMateria().equals(codigoMateria)
+                    && horario.getCodigoSalon().equals(codigoSalon)
+                    && horario.getDia() == dia
+                    && horario.getHora() == hora) {
+
                 horarioEliminar = horario;
                 break;
             }
@@ -68,7 +89,8 @@ public class GestionarHorarios {
         Salon salon = gestionSalones.buscarSalon(codigoSalon);
 
         if (salon != null) {
-            salon.liberarHorario(dia, hora);
+            salon.liberarHorario(
+                    dia, hora, horarioEliminar.getDuracion());
         }
 
         System.out.println("Horario eliminado correctamente.");

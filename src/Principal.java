@@ -1,6 +1,7 @@
 import java.util.Scanner;
 import Modelo.*;
 import Estructuras.*;
+import Excepciones.ArchivoInvalidoException;
 import Excepciones.EstudianteNoEncontradoException;
 import Excepciones.MateriaNoEncontradaException;
 import Excepciones.PrerrequisitoNoCumplidoException;
@@ -937,7 +938,11 @@ public class Principal {
                                 System.out.print("Ingrese la ruta del archivo CSV: ");
                                 String rutaArchivo = teclado.nextLine();
 
-                                gestionarSolicitudes.cargarSolicitudesCSV(rutaArchivo);
+                                try {
+                                    gestionarSolicitudes.cargarSolicitudesCSV(rutaArchivo);
+                                } catch (ArchivoInvalidoException e) {
+                                    System.out.println("Error: " + e.getMessage());
+                                }
 
                                 break;
 

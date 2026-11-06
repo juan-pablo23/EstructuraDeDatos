@@ -6,6 +6,7 @@ import Modelo.Operacion;
 import Excepciones.EstudianteNoEncontradoException;
 import Excepciones.MateriaNoEncontradaException;
 import Excepciones.PrerrequisitoNoCumplidoException;
+import Excepciones.ArchivoInvalidoException;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.io.BufferedReader;
@@ -63,10 +64,8 @@ public class GestionarSolicitudes {
             System.out.println("\nTotal de solicitudes cargadas: " + solicitudesCargadas);
 
         } catch (IOException e) {
-
-            System.out.println("Error al leer el archivo: " + e.getMessage());
-            System.out.println("Carpeta desde donde se ejecuta Java:");
-            System.out.println(System.getProperty("user.dir"));
+            throw new ArchivoInvalidoException(
+                    "No se pudo leer el archivo CSV: " + e.getMessage());
         }
     }
 
