@@ -334,9 +334,33 @@ public class Estudiante extends Persona {
     }
 
     public void deshacerRegistroNota(int indiceSemestre, int indiceMateria) {
-        if (posicionValida(indiceSemestre, indiceMateria)) {
-            notas[indiceSemestre][indiceMateria] = null;
-            codigosMaterias[indiceSemestre][indiceMateria] = null;
+
+        if (!posicionValida(indiceSemestre, indiceMateria)) {
+            return;
+        }
+
+        String codigo = codigosMaterias[indiceSemestre][indiceMateria];
+
+        notas[indiceSemestre][indiceMateria] = null;
+        codigosMaterias[indiceSemestre][indiceMateria] = null;
+
+        boolean sigueAprobada = false;
+
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 20; j++) {
+
+                if (codigo != null
+                        && codigo.equals(codigosMaterias[i][j])
+                        && notas[i][j] != null
+                        && notas[i][j] >= 3.0) {
+
+                    sigueAprobada = true;
+                }
+            }
+        }
+
+        if (!sigueAprobada && codigo != null) {
+            materiasAprobadas.remove(codigo);
         }
     }
 }

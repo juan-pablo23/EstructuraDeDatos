@@ -176,7 +176,7 @@ public class GestionarSolicitudes {
                                     solicitud.getCodigoMateria(),
                                     idEstudiante);
                         } else {
-                            materia.retirarEstudianteDeColaEspera(idEstudiante);
+                            materia.retirarEstudianteEspera(idEstudiante);
                         }
 
                         devolverSolicitud(solicitud);

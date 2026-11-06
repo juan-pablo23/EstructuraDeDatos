@@ -1,5 +1,6 @@
 package Modelo;
 
+import Excepciones.ColaDeEsperaVaciaException;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -71,7 +72,22 @@ public class Materia {
         return estudiantesInscritos.remove(idEstudiante);
     }
 
-    public boolean retirarEstudianteDeColaEspera(String idEstudiante) {
+    public String retirarEstudianteDeColaEspera() {
+
+        if (colaEspera.isEmpty()) {
+            throw new ColaDeEsperaVaciaException("La cola de espera esta vacia.");
+        }
+
+        return colaEspera.poll();
+    }
+
+    public boolean retirarEstudianteEspera(String idEstudiante) {
+
+        if (colaEspera.isEmpty()) {
+            throw new ColaDeEsperaVaciaException(
+                    "La cola de espera esta vacia.");
+        }
+
         return colaEspera.remove(idEstudiante);
     }
 

@@ -4,6 +4,7 @@ import Estructuras.*;
 import Excepciones.EstudianteNoEncontradoException;
 import Excepciones.MateriaNoEncontradaException;
 import Excepciones.PrerrequisitoNoCumplidoException;
+import Excepciones.PilaDeshacerVaciaException;
 
 public class Principal {
 
@@ -955,12 +956,20 @@ public class Principal {
                 // opcion
                 // 8------------------------------------------------------------------------------
                 case 8:
-                    gestionarOperaciones.deshacerOperacion();
+                    try {
+                        gestionarOperaciones.deshacerOperacion();
+                    } catch (PilaDeshacerVaciaException e) {
+                        System.out.println(e.getMessage());
+                    }
                     break;
                 // opcion
                 // 9----------------------------------------------------------------------------------
                 case 9:
-                    gestionarOperaciones.rehacerOperacion();
+                    try {
+                        gestionarOperaciones.rehacerOperacion();
+                    } catch (PilaDeshacerVaciaException e) {
+                        System.out.println(e.getMessage());
+                    }
                     break;
                 // opcion10-----------------------------------------------------------------------------------
                 case 10:
