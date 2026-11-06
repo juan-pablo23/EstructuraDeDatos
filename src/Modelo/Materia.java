@@ -71,6 +71,10 @@ public class Materia {
         return estudiantesInscritos.remove(idEstudiante);
     }
 
+    public boolean retirarEstudianteDeColaEspera(String idEstudiante) {
+        return colaEspera.remove(idEstudiante);
+    }
+
     public void mostrarInformacion() {
         System.out.println("Codigo: " + codigo);
         System.out.println("Nombre: " + nombre);

@@ -16,13 +16,15 @@ public class GestionarMaterias {
     }
 
     public void agregarMateria(Materia materia) {
-        if (buscarMateria(materia.getCodigo()) != null) {
+
+        try {
+            buscarMateria(materia.getCodigo());
             System.out.println("Error: ya existe una materia con ese codigo.");
             return;
+        } catch (MateriaNoEncontradaException e) {
+            materias.add(materia);
+            System.out.println("Materia agregada correctamente.");
         }
-
-        materias.add(materia);
-        System.out.println("Materia agregada correctamente.");
     }
 
     public Materia buscarMateria(String codigo) {
@@ -103,6 +105,17 @@ public class GestionarMaterias {
         }
     }
 
+    public void retirarEstudianteSinProcesarCola(String codigoMateria, String idEstudiante) {
+        Materia materia = buscarMateria(codigoMateria);
+        boolean retirado = materia.retirarEstudiante(idEstudiante);
+
+        if (retirado) {
+            System.out.println("Inscripcion deshecha correctamente.");
+        } else {
+            System.out.println("El estudiante no estaba inscrito.");
+        }
+    }
+
     public void inscribirEstudianteConPrerrequisitos(String codigoMateria, Estudiante estudiante) {
         Materia materia = buscarMateria(codigoMateria);
 
@@ -115,6 +128,7 @@ public class GestionarMaterias {
 
         if (materia.getEstudiantesInscritos().contains(idEstudiante)) {
             System.out.println("El estudiante ya esta inscrito.");
+            return;
         }
 
         if (materia.getColaEspera().contains(idEstudiante)) {
@@ -180,7 +194,8 @@ public class GestionarMaterias {
         for (String codigoPrerrequisito : materia.getPrerrequisitos()) {
 
             if (!estudiante.haAprobadoMateria(codigoPrerrequisito)) {
-                throw new PrerrequisitoNoCumplidoException("No se ha aprobado el prerrequisito: " + codigoPrerrequisito);
+                throw new PrerrequisitoNoCumplidoException(
+                        "No se ha aprobado el prerrequisito: " + codigoPrerrequisito);
             }
         }
 

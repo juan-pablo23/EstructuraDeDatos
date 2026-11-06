@@ -52,4 +52,11 @@ public class GestionarEstudiantes {
             System.out.println("No se encontro el estudiante.");
         }
     }
+
+    public void mostrarReporteAcademico(String id) {
+
+        Estudiante estudiante = buscarEstudiante(id);
+
+        estudiante.mostrarReporteAcademico();
+    }
 }

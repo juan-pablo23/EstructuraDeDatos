@@ -56,6 +56,18 @@ public class GestionarEdificios {
         return -1;
     }
 
+    public void mostrarEdificio(String codigo) {
+        int posicion = buscarEdificio(codigo);
+
+        if (posicion == -1) {
+            System.out.println("No se encontro el edificio.");
+            return;
+        }
+
+        System.out.println("\n=== EDIFICIO ENCONTRADO ===");
+        edificios[posicion].mostrarInformacion();
+    }
+
     public void mostrarEdificios() {
         if (cantidadEdificios == 0) {
             System.out.println("No hay edificios registrados.");
