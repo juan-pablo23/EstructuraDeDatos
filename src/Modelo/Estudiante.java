@@ -63,7 +63,6 @@ public class Estudiante extends Persona {
         return materiasAprobadas.contains(codigoMateria);
     }
 
-    // Asocia una materia a un semestre y una posicion.
     public void asociarMateria(int indiceSemestre, int indiceMateria,
             String codigoMateria) {
 
@@ -90,12 +89,10 @@ public class Estudiante extends Persona {
         System.out.println("Materia asociada correctamente.");
     }
 
-    // Compatibilidad: asocia la materia al semestre actual.
     public void asociarMateria(int indiceMateria, String codigoMateria) {
         asociarMateria(semestre - 1, indiceMateria, codigoMateria);
     }
 
-    // Registra la nota final de una materia en un semestre.
     public void registrarNota(int indiceSemestre, int indiceMateria,
             double nota) {
 
@@ -115,6 +112,13 @@ public class Estudiante extends Persona {
         }
 
         notas[indiceSemestre][indiceMateria] = nota;
+        String codigo = codigosMaterias[indiceSemestre][indiceMateria];
+
+        if (nota >= 3.0) {
+            registrarMateriasAprobadas(codigo);
+        } else {
+            materiasAprobadas.remove(codigo);
+        }
 
         System.out.println("Nota registrada correctamente.");
     }
@@ -124,7 +128,6 @@ public class Estudiante extends Persona {
                 && indiceMateria >= 0 && indiceMateria < 20;
     }
 
-    // Calcula el promedio de un semestre.
     public double calcularPromedio(int indiceSemestre) {
 
         if (indiceSemestre < 0 || indiceSemestre >= 10) {
@@ -153,7 +156,6 @@ public class Estudiante extends Persona {
         return calcularPromedio(indiceSemestre);
     }
 
-    // Calcula el promedio de todas las materias con nota.
     public double calcularPromedioAcumulado() {
 
         double suma = 0;
@@ -209,7 +211,6 @@ public class Estudiante extends Persona {
         }
     }
 
-    // Finaliza una materia del semestre actual.
     public void finalizarMateria(int indiceMateria) {
 
         int indiceSemestre = semestre - 1;
@@ -243,7 +244,6 @@ public class Estudiante extends Persona {
         System.out.println("Nota final: " + nota);
     }
 
-    // Genera el reporte academico completo.
     public void mostrarReporteAcademico() {
 
         System.out.println("\n========== REPORTE ACADEMICO ==========");
