@@ -137,10 +137,29 @@ public class Principal {
                                 System.out.print("Ingrese el ID del estudiante a eliminar: ");
                                 String idEliminar = teclado.nextLine();
 
-                                gestionarEstudiantes.eliminarEstudiantes(idEliminar);
+                                try {
+                                    Estudiante estudianteEliminado = gestionarEstudiantes.buscarEstudiante(idEliminar);
+
+                                    gestionarEstudiantes.eliminarEstudiantes(idEliminar);
+
+                                    Operacion operacion = new Operacion(
+                                            "ESTUDIANTE",
+                                            "Eliminacion del estudiante " + idEliminar,
+                                            estudianteEliminado,
+
+                                            () -> gestionarEstudiantes.agregarEstudiante(estudianteEliminado),
+
+                                            () -> gestionarEstudiantes.eliminarEstudiantes(idEliminar));
+
+                                    gestionarOperaciones.registrarOperacion(operacion);
+
+                                    System.out.println("Estudiante eliminado correctamente.");
+
+                                } catch (EstudianteNoEncontradoException e) {
+                                    System.out.println(e.getMessage());
+                                }
 
                                 break;
-
                             case 5:
 
                                 System.out.print("Ingrese el ID del estudiante: ");
@@ -666,11 +685,8 @@ public class Principal {
                                 }
 
                                 gestionarHorarios.eliminarHorario(
-                                        codigoMateriaEliminar,
-                                        codigoSalonEliminar,
-                                        diaEliminar,
-                                        horaEliminar,
-                                        gestionarSalones);
+                                        codigoMateriaEliminar, codigoSalonEliminar, diaEliminar, horaEliminar,
+                                        gestionarSalones, gestionarOperaciones);
 
                                 break;
 

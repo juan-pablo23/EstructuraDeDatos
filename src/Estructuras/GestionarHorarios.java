@@ -95,4 +95,69 @@ public class GestionarHorarios {
 
         System.out.println("Horario eliminado correctamente.");
     }
+
+    public void eliminarHorario(String codigoMateria, String codigoSalon,
+            int dia, int hora, GestionarSalones gestionSalones,
+            GestionarOperaciones gestionarOperaciones) {
+
+        Horario horarioEliminar = null;
+
+        for (Horario horario : horarios) {
+
+            if (horario.getCodigoMateria().equals(codigoMateria)
+                    && horario.getCodigoSalon().equals(codigoSalon)
+                    && horario.getDia() == dia
+                    && horario.getHora() == hora) {
+
+                horarioEliminar = horario;
+                break;
+            }
+        }
+
+        if (horarioEliminar == null) {
+            System.out.println("No se encontro el horario.");
+            return;
+        }
+
+        Salon salon = gestionSalones.buscarSalon(codigoSalon);
+
+        if (salon == null) {
+            System.out.println("No se encontro el salon.");
+            return;
+        }
+
+        Horario horarioGuardado = horarioEliminar;
+
+        horarios.remove(horarioEliminar);
+
+        salon.liberarHorario(
+                dia, hora, horarioGuardado.getDuracion());
+
+        Modelo.Operacion operacion = new Modelo.Operacion(
+                "HORARIO",
+                "Eliminacion de horario de la materia " + codigoMateria,
+                horarioGuardado,
+
+                () -> {
+                    salon.reservarHorario(
+                            dia, hora, horarioGuardado.getDuracion());
+
+                    horarios.add(horarioGuardado);
+
+                    System.out.println("Horario recuperado.");
+                },
+
+                () -> {
+                    horarios.remove(horarioGuardado);
+
+                    salon.liberarHorario(
+                            dia, hora, horarioGuardado.getDuracion());
+
+                    System.out.println("Eliminacion repetida.");
+                });
+
+        gestionarOperaciones.registrarOperacion(operacion);
+
+        System.out.println("Horario eliminado correctamente.");
+    }
 }
