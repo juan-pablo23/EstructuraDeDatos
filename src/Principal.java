@@ -517,6 +517,7 @@ public class Principal {
                     break;
                 // opcion
                 // 4------------------------------------------------------------------------
+
                 case 4:
                     int opcionHorario;
 
@@ -525,6 +526,7 @@ public class Principal {
                         System.out.println("1. Asignar horario");
                         System.out.println("2. Mostrar horarios registrados");
                         System.out.println("3. Eliminar horario");
+                        System.out.println("4. Consultar disponibilidad");
                         System.out.println("0. Volver al menu principal");
                         System.out.print("Seleccione una opcion: ");
 
@@ -553,14 +555,19 @@ public class Principal {
                                 System.out.print("Seleccione el dia: ");
                                 int diaHorario = teclado.nextInt();
 
-                                System.out.print("Ingrese la hora (0-23): ");
+                                System.out.print("Ingrese la hora de inicio (0-23): ");
                                 int horaHorario = teclado.nextInt();
+
+                                System.out.print("Ingrese la duracion en horas: ");
+                                int duracionHorario = teclado.nextInt();
                                 teclado.nextLine();
 
-                                if (diaHorario < 0 || diaHorario > 6 ||
-                                        horaHorario < 0 || horaHorario > 23) {
+                                if (diaHorario < 0 || diaHorario > 6
+                                        || horaHorario < 0 || horaHorario > 23
+                                        || duracionHorario <= 0
+                                        || horaHorario + duracionHorario > 24) {
 
-                                    System.out.println("Error: dia u hora no validos.");
+                                    System.out.println("Error: los datos del horario no son validos.");
                                     break;
                                 }
 
@@ -574,9 +581,10 @@ public class Principal {
 
                                         System.out.println("Error: el salon no existe.");
 
-                                    } else if (!salonHorario.estaDisponible(diaHorario, horaHorario)) {
+                                    } else if (!salonHorario.consultarDisponibilidad(
+                                            diaHorario, horaHorario, duracionHorario)) {
 
-                                        System.out.println("Error: el salon esta ocupado.");
+                                        System.out.println("Error: el salon no esta disponible.");
 
                                     } else {
 
@@ -585,31 +593,38 @@ public class Principal {
                                                 codigoSalonHorario,
                                                 diaHorario,
                                                 horaHorario,
+                                                duracionHorario,
                                                 gestionarSalones);
 
-                                        if (!salonHorario.estaDisponible(diaHorario, horaHorario)) {
+                                        if (!salonHorario.consultarDisponibilidad(
+                                                diaHorario, horaHorario, duracionHorario)) {
 
                                             Horario nuevoHorario = new Horario(
                                                     codigoMateriaHorario,
                                                     codigoSalonHorario,
                                                     diaHorario,
-                                                    horaHorario);
+                                                    horaHorario,
+                                                    duracionHorario);
 
                                             Operacion operacion = new Operacion(
                                                     "HORARIO",
-                                                    "Asignacion de horario para la materia " + codigoMateriaHorario,
+                                                    "Asignacion de horario para la materia "
+                                                            + codigoMateriaHorario,
                                                     nuevoHorario,
+
                                                     () -> gestionarHorarios.eliminarHorario(
                                                             codigoMateriaHorario,
                                                             codigoSalonHorario,
                                                             diaHorario,
                                                             horaHorario,
                                                             gestionarSalones),
+
                                                     () -> gestionarHorarios.asignarHorario(
                                                             codigoMateriaHorario,
                                                             codigoSalonHorario,
                                                             diaHorario,
                                                             horaHorario,
+                                                            duracionHorario,
                                                             gestionarSalones));
 
                                             gestionarOperaciones.registrarOperacion(operacion);
@@ -617,7 +632,6 @@ public class Principal {
                                     }
 
                                 } catch (MateriaNoEncontradaException e) {
-
                                     System.out.println("Error: " + e.getMessage());
                                 }
 
@@ -637,18 +651,17 @@ public class Principal {
                                 System.out.print("Ingrese el codigo del salon: ");
                                 String codigoSalonEliminar = teclado.nextLine();
 
-                                System.out.println("\nSeleccione el dia (0-6): ");
+                                System.out.print("Seleccione el dia (0-6): ");
                                 int diaEliminar = teclado.nextInt();
 
-                                System.out.print("Ingrese la hora (0-23): ");
+                                System.out.print("Ingrese la hora de inicio (0-23): ");
                                 int horaEliminar = teclado.nextInt();
                                 teclado.nextLine();
 
-                                if (diaEliminar < 0 || diaEliminar > 6 ||
-                                        horaEliminar < 0 || horaEliminar > 23) {
+                                if (diaEliminar < 0 || diaEliminar > 6
+                                        || horaEliminar < 0 || horaEliminar > 23) {
 
                                     System.out.println("Error: dia u hora no validos.");
-
                                     break;
                                 }
 
@@ -658,6 +671,37 @@ public class Principal {
                                         diaEliminar,
                                         horaEliminar,
                                         gestionarSalones);
+
+                                break;
+
+                            case 4:
+
+                                System.out.print("Ingrese el codigo del salon: ");
+                                String codigoSalonConsultar = teclado.nextLine();
+
+                                System.out.print("Seleccione el dia (0-6): ");
+                                int diaConsultar = teclado.nextInt();
+
+                                System.out.print("Ingrese la hora de inicio (0-23): ");
+                                int horaConsultar = teclado.nextInt();
+
+                                System.out.print("Ingrese la duracion en horas: ");
+                                int duracionConsultar = teclado.nextInt();
+                                teclado.nextLine();
+
+                                Salon salonConsultar = gestionarSalones.buscarSalon(codigoSalonConsultar);
+
+                                if (salonConsultar == null) {
+                                    System.out.println("El salon no existe.");
+
+                                } else if (salonConsultar.consultarDisponibilidad(
+                                        diaConsultar, horaConsultar, duracionConsultar)) {
+
+                                    System.out.println("El salon esta disponible.");
+
+                                } else {
+                                    System.out.println("El salon no esta disponible en ese horario.");
+                                }
 
                                 break;
 
@@ -675,7 +719,9 @@ public class Principal {
                         }
 
                     } while (opcionHorario != 0);
+
                     break;
+
                 // opcion
                 // 5----------------------------------------------------------------------------
                 case 5:
