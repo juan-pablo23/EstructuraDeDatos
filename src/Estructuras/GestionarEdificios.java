@@ -9,12 +9,17 @@ public class GestionarEdificios {
     private int cantidadEdificios;
 
     public GestionarEdificios(int capacidad) {
+
+        if (capacidad < 5) {
+            throw new IllegalArgumentException(
+                    "La capacidad debe ser de minimo 5 edificios.");
+        }
+
         edificios = new Edificio[capacidad];
         distancias = new int[capacidad][capacidad];
         cantidadEdificios = 0;
 
         for (int i = 0; i < capacidad; i++) {
-
             for (int j = 0; j < capacidad; j++) {
 
                 if (i == j) {
@@ -228,10 +233,11 @@ public class GestionarEdificios {
         cantidadEdificios--;
 
         for (int i = 0; i < edificios.length; i++) {
-            distancias[cantidadEdificios][i] = 0;
-            distancias[i][cantidadEdificios] = 0;
+            distancias[cantidadEdificios][i] = -1;
+            distancias[i][cantidadEdificios] = -1;
         }
 
+        distancias[cantidadEdificios][cantidadEdificios] = 0;
         System.out.println("Edificio eliminado correctamente.");
     }
 }

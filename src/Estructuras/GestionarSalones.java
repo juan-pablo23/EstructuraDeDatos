@@ -34,7 +34,16 @@ public class GestionarSalones {
             return;
         }
 
+        TreeMap<String, Salon> salonesOrdenados = new TreeMap<>();
+
         for (Salon salon : salones.values()) {
+            salonesOrdenados.put(
+                salon.getNombre().toLowerCase() + "|" + salon.getCodigo(),
+                salon
+            );
+        }
+
+        for (Salon salon : salonesOrdenados.values()) {
             System.out.println("------------------------");
             salon.mostrarInformacion();
         }
